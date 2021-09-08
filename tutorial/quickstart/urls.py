@@ -1,11 +1,11 @@
 from rest_framework import routers
-
 from tutorial.quickstart.views import *
+from django.views.decorators.cache import cache_page
 
 router = routers.DefaultRouter()
-router.register(r'post', PostView)
-router.register(r'comment', CommentView)
-router.register(r'category', CategoryView)
+cache_page(60)(router.register(r'post', PostView))
+cache_page(60)(router.register(r'comment', CommentView))
+cache_page(60)(router.register(r'category', CategoryView))
 
 
 urlpatterns = router.urls

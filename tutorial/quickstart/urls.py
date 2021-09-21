@@ -1,11 +1,13 @@
+#from django.urls import include, path
 from rest_framework import routers
-from tutorial.quickstart.views import *
-from django.views.decorators.cache import cache_page
+from tutorial.quickstart.views import*
 
 router = routers.DefaultRouter()
-cache_page(60)(router.register(r'post', PostView))
-cache_page(60)(router.register(r'comment', CommentView))
-cache_page(60)(router.register(r'category', CategoryView))
+router.register(r'post', PostView)
+router.register(r'comment', CommentView)
+router.register(r'category', CategoryView)
 
 
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browsable API.
 urlpatterns = router.urls

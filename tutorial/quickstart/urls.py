@@ -9,4 +9,3 @@ cache_page(80)(router.register(r'category', CategoryView))
 
 
 urlpatterns = router.urls
-erns = router.urls

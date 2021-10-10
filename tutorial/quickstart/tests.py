@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient, APITestCase
 from rest_framework.authtoken.models import Token
-from tutorial.quickstart.models import Post, Comment, Category
+from tutorial.quickstart.models import Post, Comment, Category, Author
 from rest_framework import status
 import json
 import coverage
@@ -24,6 +24,11 @@ class PostTest(APITestCase):
         self.user_token = Token.objects.create(user=self.user)
         self.category = Category.objects.create(category_name='Ноутбуки', slug='laptop')
 
+        self.new_author = Author.objects.create(
+            author_name="Ihor",
+            email="igorsivak97@gmail.com",
+        )
+
         self.correct_post = {
             'post_text': 'Name Post',
             'slug': 'name-post',
@@ -41,7 +46,7 @@ class PostTest(APITestCase):
         Post.objects.create(
             post_text='Name name Post',
             slug='name-name-post',
-            author=self.user,
+            author=self.new_author,
             category=self.category,
         )
 
@@ -89,6 +94,13 @@ class PostTest(APITestCase):
         self.assertEqual(Comment.objects.count(), 1)
         self.assertEqual(Post.objects.get(pk=1).post_comments.count(), 1)
         self.assertEqual(Post.objects.get(pk=1).post_comments.get(pk=1).text, "Good!")
+
+    def test_change_author_status(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user_token.key)
+
+        self.task = change_author_status()
+        self.assertEqual(Author.objects.get().is_notified, True)
+
 
 cov.stop()
 cov.save()

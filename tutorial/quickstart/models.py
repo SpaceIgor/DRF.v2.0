@@ -3,11 +3,20 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
+class Author(models.Model):
+    author_name = models.CharField(max_length=30)
+    email = models.EmailField(unique=True)
+    is_notified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.author_name
+
+
 class Post(models.Model):
-    post_text = models.CharField(max_length = 300)
+    post_text = models.CharField(max_length=300)
     slug = models.SlugField(max_length=100, unique=True)
     pub_date = models.DateTimeField("date_published", default=timezone.now)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='blog_posts')
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     opened = models.BooleanField(default=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
@@ -22,7 +31,7 @@ class Post(models.Model):
 class Comment(models.Model):
     text = models.TextField(max_length=700)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_comments')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='comments')
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:

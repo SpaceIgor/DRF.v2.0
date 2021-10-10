@@ -143,3 +143,5 @@ CACHES = {
     }
 }
 
+CELERY_BROKER_URL = 'amqp://localhost:5672'
+CELERY_TIMEZONE = 'Europe/Kiev'

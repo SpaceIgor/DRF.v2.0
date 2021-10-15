@@ -65,7 +65,7 @@ class CategoryView(viewsets.ModelViewSet):
 
 
 class Logout(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     def post(self, request, format=None):
         request.user.auth_token.delete()
